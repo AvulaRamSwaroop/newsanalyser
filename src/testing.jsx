@@ -13,31 +13,8 @@ import {
 } from "lucide-react";
 import { Groq } from "groq-sdk";
 import "./index.css";
-// import process from  "node:process"
-const TrumpNewsAIAgent = ({ onArticleSelection }) => {
-  // ... existing code ...
-  // Import at the top of your file
 
-  // Modify the toggleArticleSelection function
-  const toggleArticleSelection = (article) => {
-    let newSelectedArticles;
-    if (selectedArticles.some((a) => a.url === article.url)) {
-      newSelectedArticles = selectedArticles.filter(
-        (a) => a.url !== article.url
-      );
-    } else {
-      newSelectedArticles = [...selectedArticles, article];
-    }
-    setSelectedArticles(newSelectedArticles);
-
-    // Pass the selected articles up to the parent component
-    if (onArticleSelection) {
-      onArticleSelection(newSelectedArticles);
-    }
-  };
-
-  // ... rest of the component ...
-
+const TrumpNewsAIAgent1 = ({ onArticleSelection }) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -86,6 +63,36 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
     };
     fetchNews();
   }, []);
+
+  // Check claim with ClaimBuster API
+  const checkClaimWithClaimBuster = async (claim) => {
+    try {
+      const apiKey = "36b58fc9f3cd474ca12b093416a4a14e";
+
+      // Define the endpoint with the claim
+      const encodedClaim = encodeURIComponent(claim);
+      const apiEndpoint = `https://idir.uta.edu/claimbuster/api/v2/score/text/${encodedClaim}`;
+
+      // Make the request to ClaimBuster API
+      const response = await fetch(apiEndpoint, {
+        method: "GET",
+        headers: {
+          "x-api-key": apiKey,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`ClaimBuster API error: ${response.status}`);
+      }
+
+      // Parse and return the result
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      console.error("ClaimBuster API error:", error);
+      return null;
+    }
+  };
 
   // Function to analyze selected articles with Groq's Llama model
   const analyzeArticles = async () => {
@@ -152,41 +159,66 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
 
       // If in fact-check mode, extract claims
       if (analysisMode === "factCheck") {
-        // Extract fact-checked claims (in a real app, this would be more sophisticated)
-        const claimsAnalysis = await groqClient.current.chat.completions.create(
-          {
-            messages: [
-              {
-                role: "system",
-                content:
-                  "Extract the key claims and their fact-check status from the analysis. Format as JSON array with 'claim' and 'status' (true/false/unverified) properties.",
-              },
-              {
-                role: "user",
-                content: chatCompletion.choices[0].message.content,
-              },
-            ],
-            model: "llama3-8b-8192",
-            temperature: 0.2,
-            response_format: { type: "json_object" },
-          }
-        );
-
-        try {
-          const claimsData = JSON.parse(
-            claimsAnalysis.choices[0].message.content
-          );
-          setFactCheckedClaims(claimsData.claims || []);
-        } catch (e) {
-          console.error("Failed to parse claims data:", e);
-          setFactCheckedClaims([]);
-        }
+        await performFactCheck(selectedArticles);
       }
     } catch (error) {
       console.error("AI analysis error:", error);
       setAiAnalysis("Error performing analysis. Please try again later.");
     } finally {
       setIsAnalyzing(false);
+    }
+  };
+
+  // Function to perform fact checking with ClaimBuster
+  const performFactCheck = async (articles) => {
+    try {
+      // Extract potential claims from selected articles
+      const extractedClaims = [];
+
+      // For each article, extract the title and key sentences from the description
+      for (const article of articles) {
+        extractedClaims.push({
+          text: article.title,
+          source: article.source.name,
+          type: "title",
+        });
+
+        // If there's a description, split it into sentences and check each one
+        if (article.description) {
+          const sentences = article.description
+            .split(/[.!?]+/)
+            .filter((s) => s.trim().length > 20);
+          for (const sentence of sentences) {
+            extractedClaims.push({
+              text: sentence.trim(),
+              source: article.source.name,
+              type: "description",
+            });
+          }
+        }
+      }
+
+      // Check each claim with ClaimBuster API to get check-worthiness scores
+      const scoredClaims = await Promise.all(
+        extractedClaims.map(async (claim) => {
+          const result = await checkClaimWithClaimBuster(claim.text);
+          return {
+            ...claim,
+            score: result?.results?.score || 0,
+            isCheckWorthy: (result?.results?.score || 0) > 0.5, // Claims with score > 0.5 are considered check-worthy
+          };
+        })
+      );
+
+      // Sort claims by check-worthiness score (highest first)
+      const checkWorthyClaims = scoredClaims
+        .filter((claim) => claim.isCheckWorthy)
+        .sort((a, b) => b.score - a.score);
+
+      setFactCheckedClaims(checkWorthyClaims);
+    } catch (error) {
+      console.error("Fact check error:", error);
+      setFactCheckedClaims([]);
     }
   };
 
@@ -206,16 +238,23 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
     return published.toLocaleDateString();
   };
 
-  // // Toggle article selection
-  // const toggleArticleSelection = (article) => {
-  //   if (selectedArticles.some((a) => a.url === article.url)) {
-  //     setSelectedArticles(
-  //       selectedArticles.filter((a) => a.url !== article.url)
-  //     );
-  //   } else {
-  //     setSelectedArticles([...selectedArticles, article]);
-  //   }
-  // };
+  // Toggle article selection
+  const toggleArticleSelection = (article) => {
+    let newSelectedArticles;
+    if (selectedArticles.some((a) => a.url === article.url)) {
+      newSelectedArticles = selectedArticles.filter(
+        (a) => a.url !== article.url
+      );
+    } else {
+      newSelectedArticles = [...selectedArticles, article];
+    }
+    setSelectedArticles(newSelectedArticles);
+
+    // Pass the selected articles up to the parent component
+    if (onArticleSelection) {
+      onArticleSelection(newSelectedArticles);
+    }
+  };
 
   // Extract unique source categories
   const categories = [
@@ -304,7 +343,6 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
               <Check size={14} className="mr-1" />
               Fact Checking
             </button>
-
             <button
               onClick={() => setAnalysisMode("biasAnalysis")}
               className={`px-4 py-2 rounded-full text-sm transition flex items-center ${
@@ -372,6 +410,7 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
             </button>
           </div>
         </header>
+
         {/* AI Analysis Results */}
         {aiAnalysis && (
           <div className="mb-8 bg-white rounded-lg shadow-md p-6">
@@ -389,50 +428,76 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
                 )}
             </div>
 
-            {/* Fact Check Claims Display */}
+            {/* Enhanced Fact Check Claims Display with ClaimBuster scores */}
             {analysisMode === "factCheck" && factCheckedClaims.length > 0 && (
               <div className="mt-6 border-t pt-4">
                 <h3 className="font-bold text-lg mb-3">Key Claims</h3>
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {factCheckedClaims.map((claim, idx) => (
-                    <div key={idx} className="flex items-start">
-                      <div
-                        className={`flex-shrink-0 rounded-full p-1 mt-0.5 mr-2 ${
-                          claim.status === true
-                            ? "bg-green-100"
-                            : claim.status === false
-                            ? "bg-red-100"
-                            : "bg-yellow-100"
-                        }`}
-                      >
-                        <Check
-                          size={14}
-                          className={
-                            claim.status === true
-                              ? "text-green-600"
-                              : claim.status === false
-                              ? "text-red-600"
-                              : "text-yellow-600"
-                          }
-                        />
-                      </div>
-                      <div>
-                        <p className="text-sm">{claim.claim}</p>
-                        <p
-                          className={`text-xs font-medium ${
-                            claim.status === true
-                              ? "text-green-600"
-                              : claim.status === false
-                              ? "text-red-600"
-                              : "text-yellow-600"
+                    <div key={idx} className="bg-gray-50 p-3 rounded-md">
+                      <div className="flex items-start">
+                        <div
+                          className={`flex-shrink-0 rounded-full p-1 mt-0.5 mr-2 ${
+                            claim.verified ? "bg-green-100" : "bg-yellow-100"
                           }`}
                         >
-                          {claim.status === true
-                            ? "Verified"
-                            : claim.status === false
-                            ? "False"
-                            : "Unverified"}
-                        </p>
+                          {claim.verified ? (
+                            <Check size={16} className="text-green-600" />
+                          ) : (
+                            <AlertTriangle
+                              size={16}
+                              className="text-yellow-600"
+                            />
+                          )}
+                        </div>
+                        <div className="w-full">
+                          <div className="flex justify-between items-start">
+                            <p className="font-medium">{claim.claim}</p>
+                            <span className="ml-2 px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">
+                              Score: {claim.checkWorthinessScore.toFixed(2)}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600">
+                            Source: {claim.source}
+                          </p>
+
+                          {claim.factChecks.length > 0 ? (
+                            <div className="mt-2">
+                              <p className="text-sm font-medium">
+                                Fact Check Results:
+                              </p>
+                              <ul className="mt-1 space-y-2">
+                                {claim.factChecks.map((check, i) => (
+                                  <li key={i} className="text-sm">
+                                    <span
+                                      className={`font-medium ${
+                                        check.claimReview[0].textualRating
+                                          .toLowerCase()
+                                          .includes("false")
+                                          ? "text-red-600"
+                                          : check.claimReview[0].textualRating
+                                              .toLowerCase()
+                                              .includes("true")
+                                          ? "text-green-600"
+                                          : "text-yellow-600"
+                                      }`}
+                                    >
+                                      {check.claimReview[0].textualRating}
+                                    </span>
+                                    <span>
+                                      {" "}
+                                      - by {check.claimReview[0].publisher.name}
+                                    </span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ) : (
+                            <p className="text-sm italic mt-1">
+                              No fact checks found for this claim
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -441,6 +506,7 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
             )}
           </div>
         )}
+
         {/* Articles Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {filteredArticles.map((article, index) => (
@@ -534,7 +600,7 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
             </div>
           ))}
         </div>
-        text
+
         {/* No Articles Found */}
         {filteredArticles.length === 0 && (
           <div className="text-center py-20">
@@ -549,4 +615,4 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
   );
 };
 
-export default TrumpNewsAIAgent;
+export default TrumpNewsAIAgent1;
