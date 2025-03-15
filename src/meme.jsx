@@ -21,13 +21,36 @@ const MemeAndSoundbiteGenerator = ({ selectedArticles = [] }) => {
   const [feedback, setFeedback] = useState({ likes: 0, dislikes: 0 });
   const groqClient = useRef(null);
   const memeRef = useRef(null);
+  // const [memeTemplates, setMemeTemplates] = useState([
+  //   "https://i.imgflip.com/4/1bij.jpg", // One Does Not Simply
+  //   "https://i.imgflip.com/4/1bgw.jpg", // Distracted Boyfriend
+  //   "https://i.imgflip.com/4/1g8my.jpg", // Two Buttons
+  //   "https://i.imgflip.com/4/9ehk.jpg", // Jack Sparrow Being Chased
+  //   "https://i.imgflip.com/4/30b5j.jpg", // Drake Hotline Bling
+  // ]);
   const [memeTemplates, setMemeTemplates] = useState([
     "https://i.imgflip.com/4/1bij.jpg", // One Does Not Simply
     "https://i.imgflip.com/4/1bgw.jpg", // Distracted Boyfriend
     "https://i.imgflip.com/4/1g8my.jpg", // Two Buttons
     "https://i.imgflip.com/4/9ehk.jpg", // Jack Sparrow Being Chased
     "https://i.imgflip.com/4/30b5j.jpg", // Drake Hotline Bling
+    "https://i.imgflip.com/4/37mfnz.jpg", // UNO Draw 25 Cards
+    "https://i.imgflip.com/4/3lmzyx.jpg", // Bernie I Am Once Again Asking For Your Support
+    "https://i.imgflip.com/4/3oevdk.jpg", // Always Has Been
+    "https://i.imgflip.com/4/24y43o.jpg", // Change My Mind
+    "https://i.imgflip.com/4/1otk96.jpg", // Gru's Plan
+    "https://i.imgflip.com/4/28j0te.jpg", // Monkey Puppet
+    "https://i.imgflip.com/4/1e7ql7.jpg", // Running Away Balloon
+    "https://i.imgflip.com/4/4acd7j.jpg", // Trade Offer
+    "https://i.imgflip.com/4/3qqcim.jpg", // Anakin Padme 4 Panel
+    "https://i.imgflip.com/4/1ur9b0.jpg", // Woman Yelling At Cat
+    "https://i.imgflip.com/4/4t0m5.jpg", // Hide the Pain Harold
+    "https://i.imgflip.com/4/gtj5t.jpg", // Oprah You Get A
+    "https://i.imgflip.com/4/9vct.jpg", // Surprised Pikachu
+    "https://i.imgflip.com/4/grr.jpg", // Leonardo DiCaprio Cheers
+    "https://i.imgflip.com/4/4xgqu.jpg", // Futurama Fry
   ]);
+
   const [selectedTemplate, setSelectedTemplate] = useState(0);
 
   // Initialize Groq client
