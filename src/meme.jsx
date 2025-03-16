@@ -11,7 +11,22 @@ import {
   Share2,
 } from "lucide-react";
 import html2canvas from "html2canvas";
-
+import m1 from "./assets/m1.jpg" 
+import m2 from "./assets/1bgw.jpg" 
+import m3 from "./assets/1e7ql7.jpg" 
+import m4 from "./assets/1otk96.jpg" 
+import m5 from "./assets/1ur9b0.jpg" 
+import m6 from "./assets/3lmzyx.jpg" 
+import m7 from "./assets/3oevdk.jpg" 
+import m8 from "./assets/3qqcim.jpg" 
+import m9 from "./assets/4acd7j.jpg" 
+import m10 from "./assets/4t0m5.jpg" 
+import m11 from "./assets/4xgqu.jpg" 
+import m12 from "./assets/9ehk.jpg" 
+import m13 from "./assets/9vct.jpg" 
+import m14 from "./assets/24y43o.jpg" 
+import m15 from "./assets/28j0te.jpg" 
+import m16 from "./assets/grr.jpg"
 const MemeAndSoundbiteGenerator = ({ selectedArticles = [] }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedContent, setGeneratedContent] = useState(null);
@@ -22,27 +37,7 @@ const MemeAndSoundbiteGenerator = ({ selectedArticles = [] }) => {
   const groqClient = useRef(null);
   const memeRef = useRef(null);
   const [memeTemplates] = useState([
-    "https://i.imgflip.com/4/1bij.jpg", // One Does Not Simply
-    "https://i.imgflip.com/4/1bgw.jpg", // Distracted Boyfriend
-    "https://i.imgflip.com/4/1g8my.jpg", // Two Buttons
-    "https://i.imgflip.com/4/9ehk.jpg", // Jack Sparrow Being Chased
-    "https://i.imgflip.com/4/30b5j.jpg", // Drake Hotline Bling
-    "https://i.imgflip.com/4/37mfnz.jpg", // UNO Draw 25 Cards
-    "https://i.imgflip.com/4/3lmzyx.jpg", // Bernie I Am Once Again Asking For Your Support
-    "https://i.imgflip.com/4/3oevdk.jpg", // Always Has Been
-    "https://i.imgflip.com/4/24y43o.jpg", // Change My Mind
-    "https://i.imgflip.com/4/1otk96.jpg", // Gru's Plan
-    "https://i.imgflip.com/4/28j0te.jpg", // Monkey Puppet
-    "https://i.imgflip.com/4/1e7ql7.jpg", // Running Away Balloon
-    "https://i.imgflip.com/4/4acd7j.jpg", // Trade Offer
-    "https://i.imgflip.com/4/3qqcim.jpg", // Anakin Padme 4 Panel
-    "https://i.imgflip.com/4/1ur9b0.jpg", // Woman Yelling At Cat
-    "https://i.imgflip.com/4/4t0m5.jpg", // Hide the Pain Harold
-    "https://i.imgflip.com/4/gtj5t.jpg", // Oprah You Get A
-    "https://i.imgflip.com/4/9vct.jpg", // Surprised Pikachu
-    "https://i.imgflip.com/4/grr.jpg", // Leonardo DiCaprio Cheers
-    "https://i.imgflip.com/4/4xgqu.jpg", // Futurama Fry
-  ]);
+m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16  ]);
 
   const [selectedTemplate, setSelectedTemplate] = useState(0);
 
