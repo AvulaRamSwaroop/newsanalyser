@@ -48,7 +48,7 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [factCheckedClaims, setFactCheckedClaims] = useState([]);
   const groqClient = useRef(null);
-
+  const [sortOrder, setSortOrder] = useState("latest");
   // Initialize Groq client
   useEffect(() => {
     // Initialize Groq client with API key
@@ -57,7 +57,20 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
       dangerouslyAllowBrowser: true, // Note: In production, proxy through backend
     });
   }, []);
-
+  const sortArticles = (articles, order) => {
+    return [...articles].sort((a, b) => {
+      const dateA = new Date(a.publishedAt);
+      const dateB = new Date(b.publishedAt);
+      return order === "latest" ? dateB - dateA : dateA - dateB;
+    });
+  };
+  // Filtered articles based on active category and sort order
+  const filteredArticles = sortArticles(
+    activeCategory === "all"
+      ? articles
+      : articles.filter((article) => article.source.name === activeCategory),
+    sortOrder
+  );
   // Fetch news articles
   useEffect(() => {
     const fetchNews = async () => {
@@ -223,13 +236,7 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
     ...new Set(articles.map((article) => article.source.name)),
   ].slice(0, 8);
 
-  // Filtered articles based on active category
-  const filteredArticles =
-    activeCategory === "all"
-      ? articles
-      : articles.filter((article) => article.source.name === activeCategory);
-
-  if (loading) {
+    if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="animate-pulse grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4">
@@ -334,7 +341,18 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
               </button>
             ))}
           </div>
-
+          <div className="flex justify-center mt-4">
+            <button
+              onClick={() =>
+                setSortOrder(sortOrder === "latest" ? "oldest" : "latest")
+              }
+              className="px-4 py-4 my-4  rounded-full text-sm transition flex items-center bg-gray-200 hover:bg-gray-300"
+            >
+              <Clock size={14} className="mr-1" />
+              Sort by:{" "}
+              {sortOrder === "latest" ? "Latest First" : "Oldest First"}
+            </button>
+          </div>
           {/* Analysis Action Button */}
           <div className="flex justify-center mb-6">
             <button
