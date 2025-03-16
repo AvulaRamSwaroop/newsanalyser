@@ -45,7 +45,7 @@ m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16  ]);
   useEffect(() => {
     groqClient.current = new Groq({
       apiKey: import.meta.env.VITE_REACT_APP_GROQ_API_KEY,
-      dangerouslyAllowBrowser: true, // In production, proxy through backend
+      dangerouslyAllowBrowser: true,
     });
   }, []);
 
@@ -119,7 +119,6 @@ m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16  ]);
         response_format: { type: "json_object" },
       });
 
-      // Parse the generated content
       const content = JSON.parse(completion.choices[0].message.content);
       setGeneratedContent(content);
 
@@ -172,9 +171,9 @@ m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16  ]);
 
   const giveFeedback = (type) => {
     if (type === "like") {
-      setFeedback({ ...feedback, likes: feedback.likes + 1 });
+      setFeedback({ ...feedback, likes:1,dislikes: 0 });
     } else {
-      setFeedback({ ...feedback, dislikes: feedback.dislikes + 1 });
+      setFeedback({ ...feedback, dislikes: 1,likes: 0 });
     }
     // In a real app, you would send this feedback to your backend
   };

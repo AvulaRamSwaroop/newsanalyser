@@ -13,31 +13,8 @@ import {
 } from "lucide-react";
 import { Groq } from "groq-sdk";
 import "./index.css";
-// import process from  "node:process"
+
 const TrumpNewsAIAgent = ({ onArticleSelection }) => {
-  // ... existing code ...
-  // Import at the top of your file
-
-  // Modify the toggleArticleSelection function
-  const toggleArticleSelection = (article) => {
-    let newSelectedArticles;
-    if (selectedArticles.some((a) => a.url === article.url)) {
-      newSelectedArticles = selectedArticles.filter(
-        (a) => a.url !== article.url
-      );
-    } else {
-      newSelectedArticles = [...selectedArticles, article];
-    }
-    setSelectedArticles(newSelectedArticles);
-
-    // Pass the selected articles up to the parent component
-    if (onArticleSelection) {
-      onArticleSelection(newSelectedArticles);
-    }
-  };
-
-  // ... rest of the component ...
-
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -49,12 +26,29 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
   const [factCheckedClaims, setFactCheckedClaims] = useState([]);
   const groqClient = useRef(null);
   const [sortOrder, setSortOrder] = useState("latest");
+  
+  const toggleArticleSelection = (article) => {
+    let newSelectedArticles;
+    if (selectedArticles.some((a) => a.url === article.url)) {
+      newSelectedArticles = selectedArticles.filter(
+        (a) => a.url !== article.url
+      );
+    } else {
+      newSelectedArticles = [...selectedArticles, article];
+    }
+    setSelectedArticles(newSelectedArticles);
+
+    if (onArticleSelection) {
+      onArticleSelection(newSelectedArticles);
+    }
+  };
+
+
   // Initialize Groq client
   useEffect(() => {
-    // Initialize Groq client with API key
     groqClient.current = new Groq({
       apiKey: import.meta.env.VITE_REACT_APP_GROQ_API_KEY,
-      dangerouslyAllowBrowser: true, // Note: In production, proxy through backend
+      dangerouslyAllowBrowser: true, 
     });
   }, []);
   const sortArticles = (articles, order) => {
@@ -100,7 +94,6 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
     fetchNews();
   }, []);
 
-  // Function to analyze selected articles with Groq's Llama model
   const analyzeArticles = async () => {
     if (selectedArticles.length === 0) {
       alert("Please select at least one article to analyze");
@@ -111,7 +104,6 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
     setAiAnalysis("");
 
     try {
-      // Prepare the articles data for the AI
       const articlesData = selectedArticles.map((article) => ({
         title: article.title,
         source: article.source.name,
@@ -141,7 +133,7 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
             "You are a neutral political analyst. Provide a balanced, objective summary and analysis of these Trump-related news articles.";
       }
 
-      // Call Groq API with Llama 3 model
+
       const chatCompletion = await groqClient.current.chat.completions.create({
         messages: [
           {
@@ -155,7 +147,7 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
             )}`,
           },
         ],
-        model: "llama3-70b-8192", // Using Llama 3 70B model
+        model: "llama3-70b-8192", 
         temperature: 0.7,
         max_tokens: 2048,
       });
@@ -165,7 +157,6 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
 
       // If in fact-check mode, extract claims
       if (analysisMode === "factCheck") {
-        // Extract fact-checked claims (in a real app, this would be more sophisticated)
         const claimsAnalysis = await groqClient.current.chat.completions.create(
           {
             messages: [
@@ -219,18 +210,8 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
     return published.toLocaleDateString();
   };
 
-  // // Toggle article selection
-  // const toggleArticleSelection = (article) => {
-  //   if (selectedArticles.some((a) => a.url === article.url)) {
-  //     setSelectedArticles(
-  //       selectedArticles.filter((a) => a.url !== article.url)
-  //     );
-  //   } else {
-  //     setSelectedArticles([...selectedArticles, article]);
-  //   }
-  // };
 
-  // Extract unique source categories
+ 
   const categories = [
     "all",
     ...new Set(articles.map((article) => article.source.name)),
