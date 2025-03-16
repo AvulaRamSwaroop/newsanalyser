@@ -534,7 +534,7 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
             </div>
           ))}
         </div>
-        text
+
         {/* No Articles Found */}
         {filteredArticles.length === 0 && (
           <div className="text-center py-20">
