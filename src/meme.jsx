@@ -15,20 +15,13 @@ import html2canvas from "html2canvas";
 const MemeAndSoundbiteGenerator = ({ selectedArticles = [] }) => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedContent, setGeneratedContent] = useState(null);
-  const [contentType, setContentType] = useState("meme"); // "meme" or "soundbite"
-  const [memeStyle, setMemeStyle] = useState("funny"); // "funny", "political", "satirical"
-  const [soundbiteStyle, setSoundbiteStyle] = useState("quote"); // "quote", "parody", "remix"
+  const [contentType, setContentType] = useState("meme");
+  const [memeStyle, setMemeStyle] = useState("funny");
+  const [soundbiteStyle, setSoundbiteStyle] = useState("quote");
   const [feedback, setFeedback] = useState({ likes: 0, dislikes: 0 });
   const groqClient = useRef(null);
   const memeRef = useRef(null);
-  // const [memeTemplates, setMemeTemplates] = useState([
-  //   "https://i.imgflip.com/4/1bij.jpg", // One Does Not Simply
-  //   "https://i.imgflip.com/4/1bgw.jpg", // Distracted Boyfriend
-  //   "https://i.imgflip.com/4/1g8my.jpg", // Two Buttons
-  //   "https://i.imgflip.com/4/9ehk.jpg", // Jack Sparrow Being Chased
-  //   "https://i.imgflip.com/4/30b5j.jpg", // Drake Hotline Bling
-  // ]);
-  const [memeTemplates, setMemeTemplates] = useState([
+  const [memeTemplates] = useState([
     "https://i.imgflip.com/4/1bij.jpg", // One Does Not Simply
     "https://i.imgflip.com/4/1bgw.jpg", // Distracted Boyfriend
     "https://i.imgflip.com/4/1g8my.jpg", // Two Buttons
@@ -56,7 +49,7 @@ const MemeAndSoundbiteGenerator = ({ selectedArticles = [] }) => {
   // Initialize Groq client
   useEffect(() => {
     groqClient.current = new Groq({
-      apiKey: "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",
+      apiKey: import.meta.env.VITE_REACT_APP_GROQ_API_KEY,
       dangerouslyAllowBrowser: true, // In production, proxy through backend
     });
   }, []);
