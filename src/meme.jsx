@@ -44,7 +44,7 @@ m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16  ]);
   // Initialize Groq client
   useEffect(() => {
     groqClient.current = new Groq({
-      apiKey: import.meta.env.VITE_REACT_APP_GROQ_API_KEY,
+      apiKey: "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",
       dangerouslyAllowBrowser: true,
     });
   }, []);

@@ -47,7 +47,7 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
   // Initialize Groq client
   useEffect(() => {
     groqClient.current = new Groq({
-      apiKey: import.meta.env.VITE_REACT_APP_GROQ_API_KEY,
+      apiKey: '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',
       dangerouslyAllowBrowser: true, 
     });
   }, []);
@@ -71,7 +71,7 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
       try {
         setLoading(true);
         const response = await fetch(
-          import.meta.env.VITE_REACT_APP_NEWS_API_URL
+          "https://newsapi.org/v2/everything?q=trump&apiKey=1f7e109baa354ccc8af97052027e9a8f"
         );
 
         if (!response.ok) {
