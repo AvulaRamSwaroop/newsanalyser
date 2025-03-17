@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Groq } from "groq-sdk";
 import "./index.css";
-
+import dataarticles from './testdataset.json'
 const TrumpNewsAIAgent = ({ onArticleSelection }) => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -70,15 +70,15 @@ const TrumpNewsAIAgent = ({ onArticleSelection }) => {
     const fetchNews = async () => {
       try {
         setLoading(true);
-        const response = await fetch(
+        let response = await fetch(
           "https://newsapi.org/v2/everything?q=trump&apiKey=1f7e109baa354ccc8af97052027e9a8f"
         );
-
+        let data;
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
+          response=dataarticles;
+          data=response;
+          // throw new Error(`HTTP error! Status: ${response.status}`);
+        }else{data = await response.json();}
 
         if (data.status === "ok") {
           setArticles(data.articles);
