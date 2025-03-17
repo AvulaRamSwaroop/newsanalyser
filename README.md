@@ -1,12 +1,61 @@
-# React + Vite
+# AI Trump News Agent  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An AI-powered agent that tracks, analyzes, and reports on Donald Trump-related news. It filters through the noise, summarizes key developments, and delivers engaging, insightful, or even satirical coverage based on different reporting styles.  
 
-Currently, two official plugins are available:
+## Features  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 🔍 **News Aggregation & Filtering**  
+- Real-time tracking of Trump-related stories from multiple sources  
+- Filtering for relevance and bias  
 
-## Expanding the ESLint configuration
+### 📝 **Summarization & Analysis**  
+- Concise, balanced summaries or opinionated takes  
+- Ability to analyze multiple news articles at once  
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 🎭 **Tone Customization**  
+- Switch between:  
+  - Serious reporting  
+  - Political satire  
+  - Neutral analysis  
+  - Media bias tone  
+
+### ✅ **Fact-Checking**  
+- Cross-reference claims with verified sources  
+- Track misinformation trends  
+- Visualize how different media outlets frame events  
+
+### 🎨 **Meme & Soundbite Generation**  
+- Generate memes based on selected news articles  
+- Create soundbites with customizable tone  
+
+## 🚀 **Installation**  
+
+1. Clone the repository:  
+   ```sh
+   git clone https://github.com/AvulaRamSwaroop/newsanalyser.git
+   cd newsanalyser
+   ```
+
+2. Install dependencies:  
+   ```sh
+   npm install
+   ```
+
+3. Set up environment variables (if required)  
+
+4. Run the project:  
+  ```sh
+  npm run dev
+  ```
+
+## 🛠 **Tech Stack**  
+- Vite + React  
+- Javascript  
+- Groq API and news API  
+- tailwind css
+
+## 💡 **Contributing**  
+Contributions are welcome! Feel free to open issues and submit pull requests.  
+
+## 📜 **License**  
+This project is licensed under the MIT License.  
