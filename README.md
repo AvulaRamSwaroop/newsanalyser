@@ -28,12 +28,38 @@ An AI-powered agent that tracks, analyzes, and reports on Donald Trump-related n
 - Generate memes based on selected news articles  
 - Create soundbites with customizable tone  
 
-
+## 📽 **Demo Video**  
+[Watch the demo](https://youtu.be/KNK1pOpUPM4?feature=shared)  
 
 ## 🚀 **Installation**  
 
 1. Clone the repository:  
    ```sh
-   git clone https://github.com/AvulaRamSwaroop/newsanalyzer.git
-   cd newsanalyzer
+   git clone https://github.com/AvulaRamSwaroop/newsanalyser.git
+   cd newsanalyser
    ```
+
+2. Install dependencies:  
+   ```sh
+   npm install
+   ```
+
+3. Set up environment variables (if required)  
+
+4. Run the project:  
+  ```sh
+   npm run dev
+   ```
+
+## 🛠 **Tech Stack**  
+- Node.js  
+- javascript  
+- Groq API and news API  
+- tailwind
+- 
+
+## 💡 **Contributing**  
+Contributions are welcome! Feel free to open issues and submit pull requests.  
+
+## 📜 **License**  
+This project is licensed under the MIT License.  
