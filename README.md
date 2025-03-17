@@ -45,15 +45,14 @@ An AI-powered agent that tracks, analyzes, and reports on Donald Trump-related n
 
 4. Run the project:  
   ```sh
-   npm run dev
-   ```
+  npm run dev
+  ```
 
 ## 🛠 **Tech Stack**  
 - Vite + React  
 - Javascript  
 - Groq API and news API  
 - tailwind css
-- 
 
 ## 💡 **Contributing**  
 Contributions are welcome! Feel free to open issues and submit pull requests.  
