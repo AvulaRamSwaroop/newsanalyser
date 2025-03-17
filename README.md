@@ -28,9 +28,6 @@ An AI-powered agent that tracks, analyzes, and reports on Donald Trump-related n
 - Generate memes based on selected news articles  
 - Create soundbites with customizable tone  
 
-## 📽 **Demo Video**  
-[Watch the demo](https://youtu.be/KNK1pOpUPM4?feature=shared)  
-
 ## 🚀 **Installation**  
 
 1. Clone the repository:  
@@ -52,10 +49,10 @@ An AI-powered agent that tracks, analyzes, and reports on Donald Trump-related n
    ```
 
 ## 🛠 **Tech Stack**  
-- Node.js  
-- javascript  
+- Vite + React  
+- Javascript  
 - Groq API and news API  
-- tailwind
+- tailwind css
 - 
 
 ## 💡 **Contributing**  
