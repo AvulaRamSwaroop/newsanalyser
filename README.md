@@ -2,6 +2,12 @@
 
 An AI-powered agent that tracks, analyzes, and reports on Donald Trump-related news. It filters through the noise, summarizes key developments, and delivers engaging, insightful, or even satirical coverage based on different reporting styles.  
 
+# Deployed Link
+[News Analyser](https://newsanalyser-p2pa.vercel.app/) 
+### NOTE:
+- This deployed version is based on test dataset
+- for Live data clone our repo and run on your computer [link](./installation)
+- get paid version of news API for better results
 ## Features  
 
 ### 🔍 **News Aggregation & Filtering**  
